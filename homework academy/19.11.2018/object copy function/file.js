@@ -1,16 +1,36 @@
 var pasport = {
-    name: "Serhii",
     age: 26,
-    year: 1992,
+    gender: 'Male',
+    name: {
+        first: 'Serhii',
+        second: 'Spasennikov',
+        father: 'Igorovich',
+    }
 };
 
-var internationalPassport = {};
+function cloneDeep(pasport) {
+    let newPasport;
+    let i;
 
-for (var copy in pasport) {
-    internationalPassport[copy] = pasport[copy];
+    if (typeof pasport !== 'object') return pasport;
+
+    if (Object.prototype.toString.apply(pasport) === '[object Array]') {
+        newPasport = [];
+        for (i = 0; i < pasport.length; i += 1) {
+            newPasport[i] = cloneDeep(pasport[i])
+        }
+        return newPasport;
+    }
+
+    newPasport = {};
+    for (i in pasport) {
+        if (pasport.hasOwnProperty(i)) {
+            newPasport[i] = cloneDeep(pasport[i])
+        }
+    }
+    return newPasport;
 }
 
-alert( internationalPassport.age );
-alert( internationalPassport.year );
-alert( pasport.age );
-alert( pasport.year );
+var internationalPassport = cloneDeep(pasport);
+
+console.log(internationalPassport.name.second);
